@@ -1,27 +1,38 @@
-import React from 'react'
+import {useEffect, useState} from "react";
+import {evaluatePassword} from './PasswordLib.tsx';
 
 interface PasswordStrengthProps{
-    password: string
+    password: string | null
 }
 
-const PasswordStrength:React.FC<PasswordStrengthProps> = ({password}: PasswordStrengthProps)=>{
-    let errorArray: Array<string> = [];
-    if(password === null){}
-    if(password.length < 8){
-        errorArray.push("Heslo musí obsahovat minimálně 8 znaků.");
+function PasswordStrength({ password }: PasswordStrengthProps) {
+
+
+    const [strength, setStrength] = useState<string | null>(null);
+
+
+    useEffect(() => {
+        const strength = evaluatePassword(password ?? "");
+        setStrength(strength);
+    }, [password]);
+
+    useEffect(() => {
+        document.title = `Heslo: ${strength ?? ""}`;
+    }, [strength]);
+
+    if(password === null){
+
+        return (  <>
+            <p>Napiste heslo</p>
+        </>);
     }
-    if(password.search("[A-Z]") === -1){
-        errorArray.push("Heslo musí obsahovat alespoň jedno velké písmeno.")
-    }
-    if(password.search("/!/@/#/$/%/^/&/*/?/´/ˇ/°/;/_/=/+/-")){
-        errorArray.push("Heslo musí obsahovat alespoň jeden speciální znak.")
-    }
-    return(
-        <>
+
+    return (
+        <p>
             {
-                errorArray[errorArray.length-1]
+                strength ?? "..."
             }
-        </>
+        </p>
     );
 }
 

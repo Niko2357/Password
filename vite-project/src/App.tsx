@@ -1,18 +1,17 @@
 import { useState } from 'react'
 import './App.css'
-import passwordInput from './PasswordInput.tsx';
-import PasswordStrength from './PasswordStrength';
+import PasswordInput from "./PasswordInput.tsx";
+import PasswordStrength from "./PasswordStrength.tsx";
 
 function App() {
-  const [password, setPassword] = useState<string>;
+    const [password, setPassword] = useState<string | null>(null);
 
-  return (
-    <>
+    return (
         <div>
-            <passwordInput password={password} setPassword={setPassword}/>
+            <PasswordInput password={password} setPassword={setPassword}/>
+            <PasswordStrength password={password}></PasswordStrength>
         </div>
-    </>
-  )
+    )
 }
 
 export default App
