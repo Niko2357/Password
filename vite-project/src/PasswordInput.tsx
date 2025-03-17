@@ -1,40 +1,44 @@
-import {useEffect} from "react";
-interface PasswordProps{
+import { useEffect } from "react";
+
+interface PasswordProps {
     password: string | null;
-    setPassword:React.Dispatch<React.SetStateAction<string | null>>
+    setPassword: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-
-
-const passwordInput: React.FC<PasswordProps> = ({password, setPassword}: PasswordProps) => {
-    const inputHandler = (event: React.ChangeEvent<HTMLInputElement>)=> {
+const PasswordInput: React.FC<PasswordProps> = ({ password, setPassword }: PasswordProps) => {
+    const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
+    };
 
-        useEffect(() => {
-            setInterval(() => {
-                if(password === null || password === "") return;
-                const indexToRemove: any = Math.round(Math.random() * passwordInput.length);
-                let newPassword: string = "";
-                for(let i = 0; i < password.length; i++){
-                    if(i === indexToRemove) continue;
-                    newPassword += password[i];
+    useEffect(() => {
+        if (password === null || password === "") return;
+        const sabotageInterval = setInterval(() => {
+            setPassword((prevPassword) => {
+                if (prevPassword === null) return prevPassword;
+                const action = Math.random() < 0.5 ? "add" : "remove";
+                if (action === "add") {
+                    return prevPassword + "🦕";
+                } else {
+                    if (prevPassword.length === 0) return prevPassword;
+                    const indexToRemove = Math.floor(Math.random() * prevPassword.length);
+                    return prevPassword.slice(0, indexToRemove) + prevPassword.slice(indexToRemove + 1);
                 }
-                setPassword(newPassword);
+            });
+        }, 1000);
 
-            }, 1000)
-        }, [password]);
+        return () => clearInterval(sabotageInterval);
+    }, [password]);
 
-
-
-    }
-    return(
+    return (
         <>
-            <h2>Password game</h2>
+            <h1>Password Game</h1>
+            <br />
             <form>
                 <label>
-                    Heslo:
+                    Password: 🐦‍🔥
+                    <br />
                     <input
-                        type= "text"
+                        type="text"
                         id="password"
                         value={password ?? ""}
                         onChange={inputHandler}
@@ -43,6 +47,6 @@ const passwordInput: React.FC<PasswordProps> = ({password, setPassword}: Passwor
             </form>
         </>
     );
-}
+};
 
-export default passwordInput;
+export default PasswordInput;
