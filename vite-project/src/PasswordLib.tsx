@@ -16,6 +16,9 @@ export function evaluatePassword(password: string){
     if(password.length === 0){
         errorArray.push("That's not a password 🐋")
     }
+    if (selectedCountry && !password.toUpperCase().includes(selectedCountry.toUpperCase())) {
+        errorArray.push(`Password does not contain the country code: ${selectedCountry}`);
+    }
     let index : number = possibleError - errorArray.length;
     index = Math.max(0, index); // zkraceny if
     const strength = passwordStrengthValues[index];
