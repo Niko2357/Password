@@ -11,7 +11,7 @@ function App() {
         <div>
             <PasswordInput password={password} setPassword={setPassword}/>
             <PasswordStrength password={password}></PasswordStrength>
-            <CountryFlagValidator password={password} /> {/* Přidáme komponentu pro validaci */}
+            <CountryFlagValidator password={password} />
         </div>
     )
 }
