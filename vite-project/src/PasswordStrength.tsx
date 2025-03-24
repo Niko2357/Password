@@ -7,12 +7,12 @@ interface PasswordStrengthProps {
 
 function PasswordStrength({ password }: PasswordStrengthProps) {
     const [strength, setStrength] = useState<string | null>(null);
-    const [errors, setErrors] = useState<string[]>([]); // State to hold error messages
+    const [errors, setErrors] = useState<string[]>([]);
 
     useEffect(() => {
         const { strength, errors } = evaluatePassword(password ?? "");
         setStrength(strength);
-        setErrors(errors); // Set errors state
+        setErrors(errors);
     }, [password]);
 
     useEffect(() => {
