@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const countries = [
     "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AS", "AT", "AU", "AW", "AX", "AZ",
@@ -20,31 +20,28 @@ const countries = [
 
 interface CountryFlagValidatorProps {
     password: string | null;
-    setCountryCode: (code: string|null) => void;
 }
 
-const CountryFlagValidator: React.FC<CountryFlagValidatorProps> = ({ password, setCountryCode }) => {
-    const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-    const [flagUrl, setFlagUrl] = useState<string | null>(null);
+const CountryFlagValidator: React.FC<CountryFlagValidatorProps> = ({ password }) => {
+    const [selectedCountry, setSelectedCountry] = useState<string>("");
+    const [isValid, setIsValid] = useState<boolean>(false);
 
     useEffect(() => {
         const randomCountry = countries[Math.floor(Math.random() * countries.length)];
         setSelectedCountry(randomCountry);
-        setFlagUrl(`https://countryflagsapi.netlify.app/flag/${randomCountry.toLowerCase()}.svg`);
-        setCountryCode(randomCountry);
-    }, [setCountryCode]);
-    let hideFlag;
-    if(selectedCountry != null && password != null){
-        hideFlag = password.toUpperCase().includes(selectedCountry.toUpperCase());
-    }
+    }, []);
+
+    useEffect(() => {
+        if (!password) return;
+        setIsValid(password.toUpperCase().includes(selectedCountry));
+    }, [password, selectedCountry]);
 
     return (
         <div>
-            {!hideFlag && flagUrl && selectedCountry && (
-                <div>
-                    <img src={flagUrl} alt={`${selectedCountry} flag`} style={{ width: '150px' }} />
-                </div>
-            )}
+            <h3>Country Challenge</h3>
+            <p>Include this country code in your password: <strong>{selectedCountry}</strong></p>
+            <img src={`https://flagcdn.com/w320/${selectedCountry.toLowerCase()}.png`} alt={`Flag of ${selectedCountry}`} width={100} />
+            <p>{isValid ? "✅ Password contains the country code!" : "❌ Password does not contain the country code."}</p>
         </div>
     );
 };
